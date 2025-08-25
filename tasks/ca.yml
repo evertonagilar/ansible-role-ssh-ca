@@ -1,0 +1,40 @@
+---
+# 1. Create local CA directory (only once)
+- name: Create local CA directory
+  become: false
+  file:
+    path: "{{ ssh_ca_dir }}"
+    state: directory
+    mode: "0700"
+  delegate_to: localhost
+  run_once: true
+
+# 2. Generate the CA key (if it doesn't exist)
+- name: Generate CA key (if missing)
+  become: false
+  command: ssh-keygen -t ed25519 -f "{{ ssh_ca_private_key }}" -C "{{ ssh_ca_comment }}" -N "{{ ssh_ca_passphrase }}"
+  args:
+    creates: "{{ ssh_ca_private_key }}"
+  delegate_to: localhost
+  run_once: true
+
+# 3. Copy the CA public key to the servers
+- name: Copy CA public key to servers
+  become: true
+  copy:
+    src: "{{ ssh_ca_public_key }}"
+    dest: /etc/ssh/ca.pub
+    owner: root
+    group: root
+    mode: '0644'
+
+# 4. Configure sshd to trust the CA
+- name: Configure sshd to trust the CA
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^TrustedUserCAKeys'
+    line: "TrustedUserCAKeys /etc/ssh/ca.pub"
+    state: present
+    insertafter: '^#?AuthorizedKeysFile'
+  notify: Restart sshd

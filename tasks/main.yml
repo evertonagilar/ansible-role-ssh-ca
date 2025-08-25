@@ -1,0 +1,16 @@
+---
+- name: Variables for SSH CA provisioning
+  debug:
+    msg:
+      - "ssh_ca_dir: {{ ssh_ca_dir }}"
+      - "ssh_ca_private_key: {{ ssh_ca_private_key }}"
+      - "ssh_ca_public_key: {{ ssh_ca_public_key }}"
+      - "ssh_ca_users_dir: {{ ssh_ca_users_dir }}"
+      - "ssh_ca_comment: {{ ssh_ca_comment }}"
+      - "ssh_ca_passphrase: {{ ssh_ca_passphrase }}"
+
+- name: Configure SSH CA
+  import_tasks: ca.yml
+
+- name: Issue SSH certificates for users
+  import_tasks: issue.yml

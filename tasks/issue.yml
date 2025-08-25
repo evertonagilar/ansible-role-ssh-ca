@@ -1,0 +1,34 @@
+---
+# 1. Create local directory to store user certificates
+- name: Create local directory for user certificates
+  become: false
+  file:
+    path: "{{ ssh_ca_users_dir }}"
+    state: directory
+    mode: "0700"
+  delegate_to: localhost
+  run_once: true
+
+# 2. Generate SSH key pair for user if it doesn't exist
+- name: Generate SSH key pair for user if missing
+  become: false
+  delegate_to: localhost
+  command: ssh-keygen -t ed25519 -f "{{ ssh_ca_users_dir }}/{{ item.name }}" -N ''
+  args:
+    creates: "{{ ssh_ca_users_dir }}/{{ item.name }}"
+  loop: "{{ ssh_ca_users }}"
+  run_once: true
+
+# 3. Issue SSH certificates for users
+- name: Issue SSH certificates for users
+  become: false
+  delegate_to: localhost
+  command: >
+    ssh-keygen -s "{{ ssh_ca_private_key }}"
+    -I "{{ item.name }}"
+    -n "{{ item.principals }}"
+    -V "{{ item.validity }}"
+    "{{ ssh_ca_users_dir }}/{{ item.name }}.pub"
+  args:
+    creates: "{{ ssh_ca_users_dir }}/{{ item.name }}-cert.pub"
+  loop: "{{ ssh_ca_users }}"

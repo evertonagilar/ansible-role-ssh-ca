@@ -1,0 +1,15 @@
+ssh_ca_dir: "{{ playbook_dir }}/ssh-ca"
+ssh_ca_private_key: "{{ ssh_ca_dir }}/ssh_ca"
+ssh_ca_public_key: "{{ ssh_ca_dir }}/ssh_ca.pub"
+ssh_ca_users_dir: "{{ ssh_ca_dir }}/ca-users"
+ssh_ca_comment: "SSH CA"
+ssh_ca_passphrase: ""
+
+
+# Usuários a emitir certificados
+ssh_ca_users: []
+# Exemplo:
+# ssh_ca_users:
+#   - name: evertonagilar
+#     validity: "+52w"
+#     principals: "evertonagilar,ubuntu"
