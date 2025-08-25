@@ -82,13 +82,13 @@ ssh_ca_users: []
 
    Or configure your `~/.ssh/config`:
 
-   ```
+   <pre>
    Host server
        HostName server.example.com
        User evertonagilar
        IdentityFile ~/.ssh/devops
        CertificateFile ~/.ssh/devops-cert.pub
-   ```
+   </pre>
 
 ---
 
