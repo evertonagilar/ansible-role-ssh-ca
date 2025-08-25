@@ -1,4 +1,3 @@
----
 
 Ansible role to manage SSH Certificate Authority (CA) and issue user certificates.
 
