@@ -82,7 +82,7 @@ ssh_ca_users: []
 
    Or configure your `~/.ssh/config`:
 
-   ```text
+   ```
    Host server
        HostName server.example.com
        User evertonagilar
