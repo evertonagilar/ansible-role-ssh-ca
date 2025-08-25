@@ -55,7 +55,7 @@ ssh_ca_users: []
       vars:
         ssh_ca_users:
           - name: devops
-            validity: "+4w"
+            validity: "+1825d"
             principals: "evertonagilar,vagrant,ubuntu"
 ```
 
